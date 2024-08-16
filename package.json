@@ -1,0 +1,32 @@
+{
+  "name": "leetcode-stats-api",
+  "version": "1.0.0",
+  "description": "leetcode-stats-api",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch app.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CaioRSV/leetcode-stats-api.git"
+  },
+  "keywords": [
+    "leetcode",
+    "stats",
+    "api"
+  ],
+  "author": "crsv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CaioRSV/leetcode-stats-api/issues"
+  },
+  "homepage": "https://github.com/CaioRSV/leetcode-stats-api#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.28.1",
+    "node-fetch": "^3.3.2"
+  }
+}
