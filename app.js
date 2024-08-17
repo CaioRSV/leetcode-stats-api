@@ -1,7 +1,8 @@
-const port = process.env.PORT || 3000;
-const host = ("RENDER" in process.env) ? `0.0.0.0` : `localhost`;
-
 require('dotenv').config();
+
+const port = process.env.PORT || 3000;
+const host = (process.env.STATUS.toUpperCase()=='DEPLOY') ? `0.0.0.0` : `localhost`;
+
 
 const queries = require('./queries.js');
 var graphql = require("graphql");
