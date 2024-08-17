@@ -46,6 +46,12 @@ query userProblemsSolved($username: String!) {
     problemsSolvedBeatsStats {
       difficulty
       percentage
+    },
+    submitStatsGlobal {
+      acSubmissionNum {
+        difficulty
+        count
+      }
     }
   }
 }

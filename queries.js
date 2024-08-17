@@ -38,6 +38,12 @@ const queries = {
           problemsSolvedBeatsStats {
             difficulty
             percentage
+          },
+          submitStatsGlobal {
+            acSubmissionNum {
+              difficulty
+              count
+            }
           }
         }
       }
