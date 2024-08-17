@@ -1,9 +1,12 @@
-const cheerio = require('cheerio');
-
 const port = process.env.PORT || 3000;
 const host = ("RENDER" in process.env) ? `0.0.0.0` : `localhost`;
 
 require('dotenv').config();
+
+const queries = require('./queries.js');
+var graphql = require("graphql");
+
+const GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT;
 
 const fastify = require('fastify')({
   logger: true
@@ -15,24 +18,78 @@ fastify.get('/', function (request, reply) {
 
 
 // General stats fetching with username
-fastify.get('/stats/:username', async function (request, reply) {
+fastify.get('/stats/:username/profile', async function (request, reply) {
     const { username } = request.params;
 
+    const queryToExecute = queries.userProfileInfo;
+    const variables = { username: username };
+
     try {
-      const response = await fetch(`https://leetcode.com/u/${username}`);
-      const body = await response.text();
-      const $ = cheerio.load(body);
+      const response = await fetch(GRAPHQL_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: queryToExecute,
+          variables: variables
+        })
+      });
+    
+      const result = await response.json();
+      reply.send(result);
 
-      console.log(body);
-
-      const name = $('[translate="no"]:first').text();
-      
-
-      reply.send({name: "1"});
     } catch (error) {
-      reply.status(500).send({ error: 'Failed to fetch user data', description: error});
+      reply.status(500).send({ error: 'Failed to fetch users profile info', description: error});
     }
   })
+
+  fastify.get('/stats/:username/languages', async function (request, reply) {
+    const { username } = request.params;
+
+    const queryToExecute = queries.userLanguageStats;
+    const variables = { username: username };
+
+    try {
+      const response = await fetch(GRAPHQL_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: queryToExecute,
+          variables: variables
+        })
+      });
+    
+      const result = await response.json();
+      reply.send(result);
+
+    } catch (error) {
+      reply.status(500).send({ error: 'Failed to fetch user language stats', description: error});
+    }
+  })
+
+  fastify.get('/stats/:username/activity', async function (request, reply) {
+    const { username } = request.params;
+
+    const queryToExecute = queries.userActivityStats;
+    const variables = { username: username };
+
+    try {
+      const response = await fetch(GRAPHQL_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: queryToExecute,
+          variables: variables
+        })
+      });
+    
+      const result = await response.json();
+      reply.send(result);
+
+    } catch (error) {
+      reply.status(500).send({ error: 'Failed to fetch user activity history', description: error});
+    }
+  })
+
 
 fastify.listen({host: host, port: port }, function (err, address) {
   if (err) {
@@ -45,57 +102,70 @@ const html = `
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hello from Render!</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <script>
-      setTimeout(() => {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          disableForReducedMotion: true
-        });
-      }, 500);
-    </script>
+    <meta charset="UTF-8">
+    <title>LeetCode Stats API - crsv</title>
     <style>
-      @import url("https://p.typekit.net/p.css?s=1&k=vnd5zic&ht=tk&f=39475.39476.39477.39478.39479.39480.39481.39482&a=18673890&app=typekit&e=css");
-      @font-face {
-        font-family: "neo-sans";
-        src: url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff2"), url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff"), url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("opentype");
-        font-style: normal;
-        font-weight: 700;
-      }
-      html {
-        font-family: neo-sans;
-        font-weight: 700;
-        font-size: calc(62rem / 16);
-      }
       body {
-        background: white;
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        background-color: black;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        gap: 50px;
+        font-family: Monospace;
+        font-size: 20px;
       }
-      section {
-        border-radius: 1em;
-        padding: 1em;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        text-decoration: none; 
+        background-color: rgba(100,100,255,0.5);
+        padding: 15px;
+        border-radius: 10px;
       }
-      section a {
-        text-decoration:none;
-        color: #1C151A;
+      
+      a:hover{
+          filter: contrast(120%);
+          transform: scale(105%);
+          transition: transform 1.5s, filter 1s;
+          duration: 500;
       }
-      section a:hover {
-        text-decoration:none;
-        color: #605A5C;
+      
+      .imgGit{
+          width: 32px;
+          height: 32px;
+          filter: invert(100%);
       }
+      
+      .leftBox{
+          padding: 14px;
+          background-color: rgba(255,255,255,0.05);
+          border-radius: 10px;
+          transition: background-color 1s;
+      }
+      
+      .leftBox:hover{
+          background-color: rgba(255,255,255,0.1);
+      }
+      
     </style>
   </head>
   <body>
-    <section>
-      <a href="https://render.com/docs/deploy-node-fastify-app">Hello from Render using Fastify!</a>
-    </section>
+    <div class="leftBox">
+        <p>CaioRSV/leetcode-stats-api</p>
+    </div>
+    <a target="_blank" href="https://github.com/CaioRSV/leetcode-stats-api">
+        <p>Repositório da API</p>
+        
+        <img class="imgGit" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"/>
+    </a>
   </body>
 </html>
+
 `

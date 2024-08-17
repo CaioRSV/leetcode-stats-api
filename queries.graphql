@@ -1,0 +1,72 @@
+query userProfileInfo($username: String!) {
+  matchedUser(username: $username) {
+    username
+    githubUrl
+    profile {
+      ranking
+      userAvatar
+      realName
+      countryName
+      skillTags
+      reputation
+      reputationDiff
+      solutionCount
+      solutionCountDiff
+    }
+  }
+}
+
+{
+	"username": "fulano",
+}
+
+------------------------------------------------
+
+query userLanguageStats($username: String!) {
+  matchedUser(username: $username) {
+    languageProblemCount {
+      languageName
+      problemsSolved
+    }
+  }
+}
+
+{
+	"username": "fulano",
+}
+
+------------------------------------------------
+
+query userProblemsSolved($username: String!) {
+  allQuestionsCount {
+    difficulty
+    count
+  }
+  matchedUser(username: $username) {
+    problemsSolvedBeatsStats {
+      difficulty
+      percentage
+    }
+  }
+}
+
+{
+	"username": "fulano",
+}
+
+-------------------------------------------
+query userActivityStats($username: String!, $year: Int) {
+  matchedUser(username: $username) {
+    userCalendar(year: $year) {
+      streak
+      totalActiveDays
+    }
+  }
+}
+
+{
+	"username": "fulano",
+  "year": 2024
+}
+
+-------------------------------------------
