@@ -66,6 +66,30 @@ fastify.get('/stats/:username/profile', async function (request, reply) {
     }
   })
 
+  fastify.get('/stats/:username/problems/difficulty', async function (request, reply) {
+    const { username } = request.params;
+
+    const queryToExecute = queries.userProblemsSolved;
+    const variables = { username: username };
+
+    try {
+      const response = await fetch(GRAPHQL_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: queryToExecute,
+          variables: variables
+        })
+      });
+    
+      const result = await response.json();
+      reply.send(result);
+
+    } catch (error) {
+      reply.status(500).send({ error: 'Failed to fetch user language stats', description: error});
+    }
+  })
+
   fastify.get('/stats/:username/activity', async function (request, reply) {
     const { username } = request.params;
 
