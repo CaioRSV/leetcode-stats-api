@@ -2,7 +2,7 @@
 
 A RESTful API that provides an interface for fetching stats from LeetCode users while improving simplicity by abstracting the GraphQL original approach of the available public route of the platform.
 
-## Set Up
+## Set up
 
 Environment:
 ```
@@ -38,3 +38,7 @@ npm run start
 ```
 /stats/:username/activity
 ```
+---
+### Additional comments:
+
+[Useful reference for the GraphQL queries](https://github.com/akarsh1995/leetcode-graphql-queries.git)
