@@ -87,7 +87,7 @@ fastify.get('/stats/:username/profile', async function (request, reply) {
       reply.send(result);
 
     } catch (error) {
-      reply.status(500).send({ error: 'Failed to fetch user language stats', description: error});
+      reply.status(500).send({ error: 'Failed to fetch problems solved by that user by difficulty', description: error});
     }
   })
 
