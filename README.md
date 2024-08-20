@@ -19,22 +19,26 @@ npm run start
 # Routes
 
 ## Public profile info
+![Profile Route](https://i.imgur.com/Bjyz4lY.png)
 ```
 /stats/:username/profile
 ```
 
 ## Problems solved by Languages
-
+![Languages Route](https://i.imgur.com/aOk4HYB.png)
 ```
 /stats/:username/languages
 ```
 
 ## Problems solved by Difficulty
+![Problems Difficulty Route](https://i.imgur.com/vE52Fnr.png)
 ```
 /stats/:username/problems/difficulty
 ```
 
 ## Daily Activity (current streak and total)
+![Activity Route](https://i.imgur.com/vTXolhF.png)
+
 ```
 /stats/:username/activity
 ```
